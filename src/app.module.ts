@@ -17,10 +17,17 @@ import { MediaModule } from './media/media.module';
 import { ComfortStadiumModule } from './comfort-stadium/comfort-stadium.module';
 import { Region } from './region/entities/region.entity';
 import { Stadium } from './stadium/entities/stadium.entity';
+import { BotModule } from './bot/bot.module';
+import { TelegrafModule } from 'nestjs-telegraf';
+import { BOT_NAME } from './app.constants';
 
 
 @Module({
   imports: [
+    TelegrafModule.forRootAsync({
+      botName: BOT_NAME,
+      useFactory: () => ({token: process.env.BOT_TOKEN, middlewares: [], include: [BotModule]})
+    }),
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
@@ -43,6 +50,7 @@ import { Stadium } from './stadium/entities/stadium.entity';
     StadiumModule,
     MediaModule,
     ComfortStadiumModule,
+    BotModule,
   ],
   controllers: [],
   providers: [],

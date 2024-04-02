@@ -14,6 +14,8 @@ import * as bcrypt from 'bcrypt';
 import { v4 } from 'uuid';
 import { MailService } from '../mail/mail.service';
 import { LoginUserDto } from './dto/login-user.dto';
+import { FindUserDto } from './dto/find-user.dto';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class UsersService {
@@ -217,12 +219,39 @@ export class UsersService {
     return response;
   }
 
-  create(creteUserDto: CreateUserDto) {
-    return 'This action creates a user'
+  async findUser(findUserDto: FindUserDto) {
+    const where = {};
+    if (findUserDto.name) {
+      where['name'] = { [Op.like]: `%${findUserDto.name}` };
+    }
+
+    if (findUserDto.email) {
+      where['email'] = { [Op.like]: `%${findUserDto.email}` };
+    }
+
+    if (findUserDto.phone) {
+      where['phone'] = { [Op.like]: `%${findUserDto.phone}` };
+    }
+
+    if (findUserDto.tg_link) {
+      where['tg_link'] = { [Op.like]: `%${findUserDto.tg_link}` };
+    }
+
+    const users = await this.userRepo.findAll({ where });
+
+    if (users.length == 0) {
+      throw new BadRequestException('user not found');
+    }
+
+    return users;
+  }
+
+  create(createUserDto: CreateUserDto) {
+    return this.userRepo.create(createUserDto);
   }
 
   findAll() {
-    return 'This action returns all users';
+    return this.userRepo.findAll();
   }
 
   findOne(id: number) {
@@ -236,5 +265,4 @@ export class UsersService {
   remove(id: number) {
     return 'This action removes a #${id} user';
   }
-
 }

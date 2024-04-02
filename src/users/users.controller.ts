@@ -19,6 +19,7 @@ import { Response } from 'express';
 import { LoginUserDto } from './dto/login-user.dto';
 import { CookieGetter } from '../decorators/cookie_getter.decorator';
 import { UserGuard } from '../guards/user.guard';
+import { FindUserDto } from './dto/find-user.dto';
 // import { Response } from 'express';
 
 @ApiTags('USers')
@@ -48,7 +49,7 @@ export class UsersController {
     return this.usersService.login(loginUserDto, res);
   }
   @UseGuards(UserGuard)
-  @Post('logOut')
+  @Post('logout')
   logOut(
     @CookieGetter('refresh_token') refreshToken: string,
     @Res({ passthrough: true })
@@ -64,6 +65,11 @@ export class UsersController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return this.usersService.refreshToken(+id, refreshToken, res);
+  }
+
+  @Post('find')
+  findUser(@Body() findUserDto: FindUserDto) {
+    return this.usersService.findUser(findUserDto)
   }
 
   @Get()
