@@ -15,6 +15,8 @@ import { Admin } from './admin/entities/admin.entity';
 import { StadiumModule } from './stadium/stadium.module';
 import { MediaModule } from './media/media.module';
 import { ComfortStadiumModule } from './comfort-stadium/comfort-stadium.module';
+import { Region } from './region/entities/region.entity';
+import { Stadium } from './stadium/entities/stadium.entity';
 
 
 @Module({
@@ -27,7 +29,7 @@ import { ComfortStadiumModule } from './comfort-stadium/comfort-stadium.module';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Comfort, District, Category, Admin],
+      models: [User, Comfort, District, Category, Admin, Region, Stadium],
       autoLoadModels: true,
       sync: { alter: true },
       logging: false,

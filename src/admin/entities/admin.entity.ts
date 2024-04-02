@@ -19,6 +19,8 @@ export class Admin extends Model<Admin, IAdminCreationAttr> {
   })
   @Column({
     type: DataType.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
   })
   id: number;
 
