@@ -1,23 +1,21 @@
 import {
-  BadRequestException,
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { Observable } from "rxjs";
 
 @Injectable()
-export class AdminGuard implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+export class SelfGuard implements CanActivate {
   canActivate(
-    context: ExecutionContext,
+    context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
-    
-
-      
-
-    return true
+    const req = context.switchToHttp().getRequest();
+    if(req.admin.id != req.params.id) {
+      throw new ForbiddenException({message: "not allowed"})
+    }
+    return true;
   }
 }
